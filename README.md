@@ -2,7 +2,7 @@
 
 Browser automation tests for the [Madrid Craigslist Housing](https://madrid.craigslist.org/) page, verifying sort functionality.
 
-Built with **Java 11+**, **Playwright**, **JUnit 5**, and **Allure**.
+Built with **Java 25**, **Playwright**, **JUnit 5**, **Allure**, and **Claude Code**.
 
 ---
 

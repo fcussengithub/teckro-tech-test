@@ -6,7 +6,7 @@ import com.microsoft.playwright.options.AriaRole;
 
 public class CraigslistHomePage {
 
-    private static final String URL = "https://madrid.craigslist.org/";
+    private final String url;
 
     private final Page page;
 
@@ -30,8 +30,9 @@ public class CraigslistHomePage {
     private final Locator jobsLink;
     private final Locator discussionForumsLink;
 
-    public CraigslistHomePage(Page page) {
+    public CraigslistHomePage(Page page, String baseUrl) {
         this.page = page;
+        this.url = baseUrl;
 
         postAdLink = page.locator("a[href*='post.craigslist.org']");
         accountLink = page.locator("a[href*='accounts.craigslist.org']");
@@ -51,7 +52,7 @@ public class CraigslistHomePage {
     }
 
     public CraigslistHomePage navigate() {
-        page.navigate(URL);
+        page.navigate(url);
         return this;
     }
 
@@ -73,7 +74,6 @@ public class CraigslistHomePage {
         return housingLink.isVisible();
     }
 
-
     public void clickHousingLink() {
         housingLink.click();
     }
@@ -91,6 +91,7 @@ public class CraigslistHomePage {
     public void clickEnglishLink() {
         englishLink.click();
     }
+
     // Search actions
 
     public void search(String query) {

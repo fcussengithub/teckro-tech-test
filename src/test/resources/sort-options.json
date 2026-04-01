@@ -1,0 +1,4 @@
+{
+  "defaultOptions": ["newest", "oldest", "£ → £££", "£££ → £", "upcoming"],
+  "afterSearchOptions": ["newest", "oldest", "£ → £££", "£££ → £", "relevant", "upcoming"]
+}

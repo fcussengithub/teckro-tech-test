@@ -1,13 +1,13 @@
 package com.teckro.pages;
 
+import java.util.ArrayList;
+
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
-import java.util.ArrayList;
-
 public class CraigslistHousingSearchPage {
 
-    private static final String URL = "https://madrid.craigslist.org/search/hhh";
+    private final String url;
 
     private final Page page;
 
@@ -25,14 +25,23 @@ public class CraigslistHousingSearchPage {
     private final Locator resultsCount;
     private final Locator priceInfoItems;
 
+    // Sort buttons
+    private final Locator sortByPriceAscButton;
+    private final Locator sortByPriceDescButton;
+    private final Locator sortModeDropdownArrow;
+
+    // Sort dropdown options
+    private final Locator sortDropdownItems;
+
     // Pagination
     private final Locator nextPageButton;
     private final Locator prevPageButton;
 
-    public CraigslistHousingSearchPage(Page page) {
+    public CraigslistHousingSearchPage(Page page, String baseUrl) {
         this.page = page;
+        this.url = baseUrl + "/search/hhh";
 
-        searchInput = page.locator("#query");
+        searchInput = page.locator("[placeholder='Search housing']");
         searchButton = page.locator("[type='submit']").first();
         sortSelect = page.locator(".cl-sort-type");
         minPriceInput = page.locator("[name='min_price']");
@@ -44,17 +53,20 @@ public class CraigslistHousingSearchPage {
         resultsCount = page.locator(".cl-page-number");
         priceInfoItems = page.locator("span.priceinfo");
 
+        sortByPriceAscButton = page.locator("button.cl-search-sort-mode-price-asc");
+        sortByPriceDescButton = page.locator("button.cl-search-sort-mode-price-desc");
+        sortModeDropdownArrow = page.locator("div.cl-search-sort-mode");
+        sortDropdownItems = page.locator("div.bd-for-bd-combo-box.bd-list-box.below div.items span.label");
         nextPageButton = page.locator("button.cl-next-page");
         prevPageButton = page.locator("button.cl-prev-page");
     }
 
     public CraigslistHousingSearchPage navigate() {
-        page.navigate(URL);
+        page.navigate(url);
         return this;
     }
 
     // Search & filter actions
-
     public void search(String query) {
         searchInput.fill(query);
         searchButton.click();
@@ -78,11 +90,32 @@ public class CraigslistHousingSearchPage {
         sortSelect.selectOption(sortValue);
     }
 
+    public void clickSortModeDropdown() {
+        sortModeDropdownArrow.click();
+    }
+
+    public void clickSortByPriceAsc() {
+        sortByPriceAscButton.click();
+    }
+
+    public void clickSortByPriceDesc() {
+        sortByPriceDescButton.click();
+    }
+
     public void toggleHasImage() {
         hasImageCheckbox.click();
     }
 
     // Results accessors
+
+    public boolean waitForPriceInfoItems() {
+        try {
+            priceInfoItems.first().waitFor();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public boolean isResultsListVisible() {
         return resultsList.isVisible();
@@ -105,16 +138,28 @@ public class CraigslistHousingSearchPage {
     }
 
     public Double getPriceAt(int index) {
-        String text = priceInfoItems.nth(index).innerText();
-        return Double.parseDouble(text.replace("€", "").replace(".", "").replace(",", ".").trim());
+        return Double.valueOf(priceInfoItems.nth(index).innerText().replace("€", "").trim());
     }
 
     public ArrayList<Double> getAllPrices() {
         ArrayList<Double> prices = new ArrayList<>();
         for (String text : priceInfoItems.allInnerTexts()) {
-            prices.add(Double.parseDouble(text.replace("€", "").replace(".", "").replace(",", ".").trim()));
+            prices.add(Double.valueOf(text.replace("€", "").trim()));
         }
         return prices;
+    }
+
+    public boolean isSortDropdownVisible() {
+        try {
+            sortModeDropdownArrow.waitFor();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public ArrayList<String> getSortDropdownItems() {
+        return new ArrayList<>(sortDropdownItems.allInnerTexts());
     }
 
     public ArrayList<String> getAllPricesAsStrings() {
@@ -130,7 +175,6 @@ public class CraigslistHousingSearchPage {
     }
 
     // Pagination
-
     public boolean isNextPageAvailable() {
         return nextPageButton.isEnabled();
     }

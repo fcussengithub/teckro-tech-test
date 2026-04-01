@@ -19,3 +19,19 @@ gradle-app.setting
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Generated files
+target/
+.class
+.lst
+
+# Test/report results
+allure-results/
+
+# Claude Code
+.claude
+
+#VS Code
+.vscode
+
+.fake

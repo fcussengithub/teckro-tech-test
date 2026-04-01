@@ -22,7 +22,7 @@ Both must be available on your `PATH`.
 ### 1. Download the JDK
 
 1. Go to https://www.oracle.com/java/technologies/downloads/ and click the **Windows** tab
-2. Choose a JDK version — the available options are **Java 21** (LTS, recommended), **Java 25**, or **Java 26** — and download either:
+2. Choose a JDK version — the available options are **Java 21**, **Java 25**, or **Java 26** — and download either:
    - **`.exe`** — recommended, double-click to run the installer
    - **`.msi`** — Windows Installer package, also runs a guided install
    - **`.zip`** — manual option, requires you to extract and configure `JAVA_HOME` yourself (see step 2 below)

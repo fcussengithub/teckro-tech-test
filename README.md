@@ -107,6 +107,44 @@ mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="in
 
 ---
 
+## Running tests from Visual Studio Code
+
+### Using the Test Explorer
+
+1. Open the project folder in VS Code (**File → Open Folder** → select the repo root)
+2. Wait for the Java extension to finish indexing (progress shown in the status bar)
+3. Click the **Testing** icon in the Activity Bar (flask icon, or `Ctrl+Shift+T` → **Go to Test Explorer**)
+4. Expand the tree: `HousingSearchSortingTests` → individual tests are listed
+5. Click the **Run** button (▶) next to a test, a class, or the root to run all tests
+6. Results appear inline — green tick for pass, red cross for fail with the assertion message shown
+
+> Tests run headed (browser visible) by default. To run headless, use the terminal command below.
+
+### Passing system properties (headless, baseUrl)
+
+The Test Explorer does not support `-D` flags directly. To pass system properties, add them to your VS Code workspace settings:
+
+1. Open **Command Palette** (`Ctrl+Shift+P`) → **Preferences: Open Workspace Settings (JSON)**
+2. Add the following (adjust values as needed):
+
+```json
+{
+  "java.test.config": {
+    "vmArgs": ["-Dheadless=true", "-DbaseUrl=https://madrid.craigslist.org"]
+  }
+}
+```
+
+3. Save the file — the Test Explorer will pick up the new arguments on the next run
+
+### Using the Maven sidebar
+
+1. Open the **Maven** panel in the Explorer sidebar (or via **View → Open View → Maven**)
+2. Expand **Lifecycle** → double-click **test** to run all tests
+3. To run a single test class or method, right-click the `test` lifecycle entry → **Execute Maven Commands** and append `-Dtest=HousingSearchSortingTests`
+
+---
+
 ## Running the tests
 
 ### Run all tests
